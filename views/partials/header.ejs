@@ -1,0 +1,82 @@
+<!-- ===== НЕОНОВЫЕ КРУГИ (ФОН) ===== -->
+<div class="bg-glow glow-1"></div>
+<div class="bg-glow glow-2"></div>
+<div class="bg-glow glow-3"></div>
+<div class="bg-glow glow-4"></div>
+
+<header>
+  <nav class="navbar">
+    <a href="/" class="logo">
+      <span class="logo-text">Neon</span><span class="logo-accent">Forge</span>
+    </a>
+
+    <button class="burger" id="burgerBtn" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/" class="<%= (title === 'Главная') ? 'active' : '' %>">Главная</a></li>
+      <li><a href="/about" class="<%= (title === 'О проекте') ? 'active' : '' %>">О проекте</a></li>
+      
+      <% if (user) { %>
+        <li><a href="/games" class="<%= (title === 'Игры') ? 'active' : '' %>">Сезонные игры</a></li>
+        <li><a href="/ad-queue" class="<%= (title === 'Очередь рекламы') ? 'active' : '' %>">Реклама</a></li>
+        <li><a href="/dashboard" class="<%= (title === 'Личный кабинет') ? 'active' : '' %>">Кабинет</a></li>
+        <li>
+          <a href="/notifications" class="<%= (title === 'Уведомления') ? 'active' : '' %>">
+            Уведомления
+            <span class="badge" id="notifBadge" style="display:none;">0</span>
+          </a>
+        </li>
+        <% if (user.username === 'admin') { %>
+          <li><a href="/admin" class="admin-link <%= (title === 'Админ-панель') ? 'active' : '' %>">Админ</a></li>
+        <% } %>
+        <li><a href="/logout" class="logout-link">Выйти</a></li>
+      <% } else { %>
+        <li><a href="/login" class="auth-link login-link <%= (title === 'Вход') ? 'active' : '' %>">Войти</a></li>
+        <li><a href="/register" class="auth-link register-link <%= (title === 'Регистрация') ? 'active' : '' %>">Регистрация</a></li>
+      <% } %>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  // === БУРГЕР-МЕНЮ ===
+  const burger = document.getElementById('burgerBtn');
+  const nav = document.getElementById('navLinks');
+  if (burger) {
+    burger.addEventListener('click', () => {
+      nav.classList.toggle('open');
+    });
+  }
+
+  // === ОБНОВЛЕНИЕ НЕПРОЧИТАННЫХ УВЕДОМЛЕНИЙ ===
+  async function updateUnreadCount() {
+    try {
+      const res = await fetch('/api/unread-count');
+      const data = await res.json();
+      const badge = document.getElementById('notifBadge');
+      if (badge) {
+        if (data.count > 0) {
+          badge.textContent = data.count;
+          badge.style.display = 'inline';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    } catch (e) {}
+  }
+  if (document.getElementById('notifBadge')) {
+    updateUnreadCount();
+    setInterval(updateUnreadCount, 30000);
+  }
+
+  // === ПОСЛЕДОВАТЕЛЬНАЯ АНИМАЦИЯ ПОЯВЛЕНИЯ ===
+  document.addEventListener('DOMContentLoaded', function() {
+    const items = document.querySelectorAll('.fade-up');
+    items.forEach((el, index) => {
+      const delay = 0.06 * (index + 1);
+      el.style.animationDelay = delay + 's';
+    });
+  });
+</script>

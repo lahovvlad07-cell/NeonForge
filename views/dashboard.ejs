@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <!-- Баннер -->
+    <div class="ad-slot ad-slot-top fade-up" style="--delay:0.1">
+      <% if (activeBanners && activeBanners.length > 0) { %>
+        <a href="<%= activeBanners[0].link || '#' %>" target="_blank" class="ad-banner">
+          <img src="<%= activeBanners[0].banner %>" alt="<%= activeBanners[0].project_name %>">
+          <span class="ad-label">Реклама</span>
+        </a>
+      <% } else { %>
+        <div class="ad-placeholder">
+          <span class="placeholder-icon">📢</span>
+          <span class="placeholder-text">Рекламное место</span>
+          <a href="/ad-buy" class="btn btn-sm btn-placeholder">Разместить</a>
+        </div>
+      <% } %>
+    </div>
+
+    <section class="dashboard-header fade-up" style="--delay:0.2">
+      <h1 class="gradient-text">Привет, <%= user.username %>!</h1>
+      <p class="text-secondary">Ваш личный кабинет NeonForge</p>
+    </section>
+
+    <!-- Баннер администратора -->
+    <% if (user.username === 'admin') { %>
+      <div class="admin-banner fade-up" style="--delay:0.3">
+        <span class="admin-banner-icon">👑</span>
+        <div class="admin-banner-content">
+          <h3>Вы вошли как администратор</h3>
+          <p>Управляйте сезонами, пользователями и рекламой в <a href="/admin">админ-панели</a>.</p>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Быстрые действия -->
+    <div class="quick-actions fade-up" style="--delay:0.35">
+      <a href="/ad-queue" class="quick-btn">💰 Пополнить баланс</a>
+      <a href="/ad-buy" class="quick-btn">📢 Подать заявку</a>
+      <a href="#" class="quick-btn" onclick="copyRefLink(); return false;">👥 Пригласить друга</a>
+    </div>
+
+    <!-- 3 карточки -->
+    <div class="summary-grid fade-up" style="--delay:0.4">
+      <div class="summary-card">
+        <span class="summary-label">🪙 Игровые монеты</span>
+        <span class="summary-value"><%= user.total_coins || 0 %></span>
+        <span class="summary-hint">Заработано в играх</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">🪙 Токены (крипта)</span>
+        <span class="summary-value"><%= tokens || 0 %></span>
+        <span class="summary-hint">Конвертировано (100 монет = 1 токен)</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">💰 Криптовалюта (USDT)</span>
+        <span class="summary-value">$<%= (cryptoValue || 0).toFixed(2) %></span>
+        <span class="summary-hint">≈ по курсу $0.01 за токен</span>
+      </div>
+    </div>
+
+    <!-- Статистика по сезонам -->
+    <% if (user.total_coins > 0) { %>
+      <div class="season-stats fade-up" style="--delay:0.45">
+        <h3>📊 Ваши достижения</h3>
+        <p>Всего монет за всё время: <strong><%= user.total_coins %></strong></p>
+        <p>Конвертировано в токены: <strong><%= tokens %></strong></p>
+      </div>
+    <% } %>
+
+    <!-- Реферальная ссылка -->
+    <div class="ref-card fade-up" style="--delay:0.5">
+      <div class="ref-header">
+        <span class="ref-label">🔗 Ваша реферальная ссылка</span>
+        <div class="ref-actions">
+          <button onclick="copyRefLink()">📋 Копировать</button>
+          <button onclick="showQR()">📱 QR-код</button>
+        </div>
+      </div>
+      <div class="ref-link">
+        <a href="<%= `http://localhost:3000/register?ref=${user.ref_code}` %>" target="_blank">
+          <%= `http://localhost:3000/register?ref=${user.ref_code}` %>
+        </a>
+      </div>
+      <div class="ref-stats">
+        <div class="ref-stat">
+          <span class="ref-stat-value"><%= referralCount || 0 %></span>
+          <span class="ref-stat-label">Приглашено</span>
+        </div>
+        <div class="ref-stat">
+          <span class="ref-stat-value"><%= referralEarnings || 0 %></span>
+          <span class="ref-stat-label">Заработано (реферальных токенов)</span>
+        </div>
+      </div>
+      <div id="qrContainer" style="display:none; margin-top:12px; text-align:center;">
+        <canvas id="qrCanvas"></canvas>
+      </div>
+    </div>
+
+    <!-- График токенов -->
+    <% if (schedules && schedules.length > 0) { %>
+      <div class="schedule-card fade-up" style="--delay:0.6">
+        <h3>📈 График начисления токенов</h3>
+        <span class="schedule-total">Осталось к получению: <strong><%= totalPending.toFixed(2) %></strong> токенов</span>
+        <div class="schedule-list">
+          <% schedules.forEach(s => { %>
+            <div class="schedule-item">
+              <span class="schedule-amount">📦 <%= s.total_tokens.toFixed(2) %> токенов</span>
+              <span class="schedule-remaining">Осталось: <%= s.remaining_tokens.toFixed(2) %></span>
+              <span class="schedule-date">⏳ <%= new Date(s.next_release_date).toLocaleDateString() %></span>
+              <div class="schedule-bar">
+                <div class="schedule-fill" style="width: <%= (1 - s.remaining_tokens / s.total_tokens) * 100 %>%;"></div>
+              </div>
+              <span class="schedule-percent"><%= Math.round((1 - s.remaining_tokens / s.total_tokens) * 100) %>%</span>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Вкладки -->
+    <div class="tabs fade-up" style="--delay:0.7">
+      <button class="tab-btn active" data-tab="overview">📊 Обзор</button>
+      <button class="tab-btn" data-tab="referrals">👥 Рефералы</button>
+      <button class="tab-btn" data-tab="ads">📢 Мои заявки</button>
+    </div>
+
+    <!-- Вкладка: Обзор -->
+    <div id="tab-overview" class="tab-content active fade-up" style="--delay:0.8">
+      <div class="transactions-card">
+        <h3>📋 История транзакций</h3>
+        <div class="table-wrapper">
+          <table class="tx-table">
+            <thead>
+              <tr>
+                <th>Тип</th>
+                <th>Сумма</th>
+                <th>Описание</th>
+                <th>Дата</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (transactions && transactions.length > 0) { %>
+                <% transactions.forEach(tx => { %>
+                  <tr>
+                    <td>
+                      <span class="tx-icon"><%= tx.type === 'topup' ? '📥' : (tx.type === 'premium_topup' ? '💎' : (tx.type === 'ad_hold' ? '🔒' : '📤')) %></span>
+                      <span class="tx-type-badge <%= tx.type === 'topup' ? 'topup' : (tx.type === 'premium_topup' ? 'premium' : (tx.type === 'ad_hold' ? 'hold' : 'other')) %>">
+                        <%= tx.type === 'topup' ? 'Пополнение' : (tx.type === 'premium_topup' ? 'Премиум' : (tx.type === 'ad_hold' ? 'Блокировка' : (tx.type === 'ad_refund' ? 'Возврат' : 'Списание'))) %>
+                      </span>
+                    </td>
+                    <td class="tx-amount <%= tx.amount > 0 ? 'positive' : 'negative' %>">
+                      <%= tx.amount > 0 ? '+' : '' %><%= tx.amount %>
+                    </td>
+                    <td><%= tx.description || '' %></td>
+                    <td class="tx-date"><%= new Date(tx.created_at).toLocaleString() %></td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr><td colspan="4" class="empty-cell">Нет транзакций</td></tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Пагинация -->
+        <% if (totalPages > 1) { %>
+          <div class="pagination">
+            <% if (currentPage > 1) { %>
+              <a href="?page=<%= currentPage - 1 %>" class="page-link">&larr; Назад</a>
+            <% } %>
+
+            <% 
+              const pages = [];
+              const total = totalPages;
+              const current = currentPage;
+              const delta = 2;
+              for (let i = 1; i <= total; i++) {
+                if (
+                  i === 1 ||
+                  i === total ||
+                  (i >= current - delta && i <= current + delta)
+                ) {
+                  pages.push(i);
+                } else if (pages[pages.length - 1] !== '...') {
+                  pages.push('...');
+                }
+              }
+            %>
+
+            <% pages.forEach(function(p) { %>
+              <% if (p === '...') { %>
+                <span class="page-dots">…</span>
+              <% } else { %>
+                <a href="?page=<%= p %>" class="page-link <%= p === current ? 'active' : '' %>"><%= p %></a>
+              <% } %>
+            <% }) %>
+
+            <% if (currentPage < totalPages) { %>
+              <a href="?page=<%= currentPage + 1 %>" class="page-link">Вперёд &rarr;</a>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Вкладка: Рефералы -->
+    <div id="tab-referrals" class="tab-content fade-up" style="--delay:0.9">
+      <div class="ref-list">
+        <h3>👥 Ваши рефералы</h3>
+        <% if (referrals && referrals.length > 0) { %>
+          <div class="table-wrapper">
+            <table class="tx-table">
+              <thead>
+                <tr><th>Имя</th><th>Email</th><th>Баланс</th><th>Дата регистрации</th></tr>
+              </thead>
+              <tbody>
+                <% referrals.forEach(ref => { %>
+                  <tr>
+                    <td><strong><%= ref.username %></strong></td>
+                    <td><%= ref.email %></td>
+                    <td><%= ref.balance || 0 %></td>
+                    <td><%= new Date(ref.created_at).toLocaleDateString() %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="empty-state">
+            <span class="empty-icon">👤</span>
+            <p>У вас пока нет рефералов. Приглашайте друзей!</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Вкладка: Мои рекламные заявки -->
+    <div id="tab-ads" class="tab-content fade-up" style="--delay:1.0">
+      <div class="ads-section">
+        <div class="ads-header">
+          <h3>📢 Мои рекламные заявки</h3>
+          <div class="ads-filters">
+            <button class="filter-btn active" data-filter="all">Все</button>
+            <button class="filter-btn" data-filter="pending">⏳ Ожидают</button>
+            <button class="filter-btn" data-filter="active">✅ Активны</button>
+            <button class="filter-btn" data-filter="completed">✔️ Завершены</button>
+          </div>
+          <a href="/ad-buy" class="btn btn-sm">➕ Новая заявка</a>
+        </div>
+        <div class="ads-list" id="adsList">
+          <% if (myAds && myAds.length > 0) { %>
+            <% myAds.forEach(ad => { %>
+              <div class="ad-item" data-status="<%= ad.status %>">
+                <div class="ad-header">
+                  <span class="ad-project"><%= ad.project_name %></span>
+                  <span class="ad-status status-<%= ad.status %>">
+                    <%= ad.status === 'pending' ? '⏳ На рассмотрении' : 
+                       ad.status === 'active' ? '✅ Активна' : 
+                       ad.status === 'rejected' ? '❌ Отклонена' : 
+                       ad.status === 'completed' ? '✔️ Завершена' : ad.status %>
+                  </span>
+                </div>
+                <p><%= ad.description || 'Без описания' %></p>
+                <div class="ad-meta">
+                  <span>💰 <%= ad.budget_tokens || '—' %> токенов</span>
+                  <span>📅 <%= new Date(ad.created_at).toLocaleDateString() %></span>
+                  <% if (ad.link) { %>
+                    <a href="<%= ad.link %>" target="_blank">🔗 Ссылка</a>
+                  <% } %>
+                </div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="empty-state">
+              <span class="empty-icon">📭</span>
+              <p>У вас пока нет рекламных заявок.</p>
+              <a href="/ad-buy" class="btn btn-sm">➕ Подать заявку</a>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script>
+    // Переключение вкладок
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const tabId = this.dataset.tab;
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        document.getElementById('tab-' + tabId).classList.add('active');
+      });
+    });
+
+    // Фильтр для заявок
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const filter = this.dataset.filter;
+        document.querySelectorAll('.ad-item').forEach(item => {
+          if (filter === 'all' || item.dataset.status === filter) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Копирование ссылки
+    function copyRefLink() {
+      const link = document.querySelector('.ref-link a').href;
+      navigator.clipboard.writeText(link).then(() => {
+        alert('Ссылка скопирована в буфер обмена!');
+      }).catch(() => {
+        const input = document.createElement('input');
+        input.value = link;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        alert('Ссылка скопирована в буфер обмена!');
+      });
+    }
+
+    // QR-код
+    function showQR() {
+      const container = document.getElementById('qrContainer');
+      if (container.style.display === 'block') {
+        container.style.display = 'none';
+        return;
+      }
+      container.style.display = 'block';
+      const link = document.querySelector('.ref-link a').href;
+      const canvas = document.getElementById('qrCanvas');
+      const img = document.createElement('img');
+      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(link);
+      img.alt = 'QR-код';
+      img.style.width = '150px';
+      img.style.height = '150px';
+      canvas.parentNode.replaceChild(img, canvas);
+    }
+  </script>
+</body>
+</html>

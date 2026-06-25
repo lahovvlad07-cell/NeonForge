@@ -1,0 +1,491 @@
+/* ============================================================
+   GLOBAL.CSS – ОСНОВНЫЕ СТИЛИ ДЛЯ ВСЕГО ПРОЕКТА
+   ВЕРСИЯ 4.1 (с резиновой адаптацией для всех элементов)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --bg-primary: #0b0f1a;
+  --bg-secondary: #131a28;
+  --bg-card: #141c2b;
+  --bg-card-hover: #1a2438;
+  --border-color: #2a3344;
+  --text-primary: #e4e9f2;
+  --text-secondary: #9aa4b8;
+  --text-muted: #6b7a93;
+  --accent-blue: #3b82f6;
+  --accent-purple: #8b5cf6;
+  --accent-green: #22c55e;
+  --accent-gold: #fbbf24;
+  --accent-red: #ef4444;
+  --radius: 16px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --transition: 0.25s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+a:hover {
+  color: var(--accent-purple);
+}
+
+main {
+  flex: 1;
+  max-width: 1100px;
+  margin: 80px auto 40px;
+  padding: 0 24px;
+  width: 100%;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+h1 { font-size: 2.6rem; margin-bottom: 16px; }
+h2 { font-size: 1.8rem; margin-bottom: 12px; }
+h3 { font-size: 1.2rem; margin-bottom: 8px; }
+
+.text-muted { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+.text-center { text-align: center; }
+.mt-2 { margin-top: 12px; }
+.mb-2 { margin-bottom: 12px; }
+.mb-4 { margin-bottom: 24px; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 24px 0;
+}
+
+/* ===== КАРТОЧКИ ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  transition: all var(--transition);
+}
+.card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-blue);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
+}
+
+/* ===== КНОПКИ ===== */
+button, .btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: 'Inter', sans-serif;
+}
+button:hover, .btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+button:active, .btn:active {
+  transform: scale(0.97);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+.btn-outline:hover {
+  background: var(--border-color);
+  border-color: var(--accent-blue);
+  box-shadow: none;
+}
+
+.btn-sm {
+  padding: 6px 18px;
+  font-size: 0.85rem;
+}
+
+/* ===== ФОРМЫ ===== */
+input, textarea, select {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  transition: all var(--transition);
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ===== ГРАДИЕНТНЫЙ ТЕКСТ ===== */
+.gradient-text {
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-blue));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientShift 3s ease infinite;
+}
+
+/* ===== АНИМАЦИИ ===== */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
+  /* animation-delay задаётся динамически через JS или inline style */
+}
+
+/* ===== НЕОНОВЫЕ КРУГИ (ФОН) ===== */
+.bg-glow {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(60px);
+  opacity: 0.7;
+}
+.glow-1 {
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.35), transparent 70%);
+  bottom: -200px;
+  right: -150px;
+}
+.glow-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.3), transparent 70%);
+  top: -120px;
+  left: -120px;
+}
+.glow-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.25), transparent 70%);
+  top: 30px;
+  right: 30px;
+}
+.glow-4 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.25), transparent 70%);
+  bottom: -120px;
+  left: -120px;
+}
+
+/* Чтобы контент был поверх кругов */
+main, header, footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== ГЛОБАЛЬНОЕ НЕОНОВОЕ СВЕЧЕНИЕ ДЛЯ ВСЕХ КАРТОЧЕК ===== */
+.card:hover,
+.feature-card:hover,
+.about-card:hover,
+.download-card:hover,
+.ad-card:hover,
+.wallet-balance:hover,
+.wallet-topup:hover,
+.wallet-crypto:hover,
+.wallet-history:hover,
+.wallet-ad:hover,
+.roadmap-card:hover,
+.stat-card:hover,
+.summary-card:hover,
+.ref-card:hover,
+.schedule-card:hover,
+.transactions-card:hover,
+.admin-section:hover,
+.download-features:hover,
+.ad-section .ad-card:hover,
+.empty-state:hover {
+  border-color: var(--accent-blue) !important;
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.4), 0 8px 32px rgba(59, 130, 246, 0.2) !important;
+  transform: translateY(-4px);
+  transition: all 0.3s ease;
+}
+
+/* ================================================================
+   РЕЗИНОВАЯ АДАПТАЦИЯ ДЛЯ ПРОМЕЖУТОЧНЫХ РАЗМЕРОВ
+   ================================================================ */
+
+/* Широкие экраны (1100–1400px) — лёгкое сжатие */
+@media (min-width: 1100px) and (max-width: 1400px) {
+  html {
+    font-size: clamp(14px, 1.1vw, 16px);
+  }
+  main {
+    max-width: 95%;
+    padding: 0 20px;
+  }
+  .ad-banner img,
+  .ad-placeholder {
+    height: 80px;
+  }
+  .hero h1 {
+    font-size: 2.4rem;
+  }
+  .dashboard-header h1 {
+    font-size: 2rem;
+  }
+  /* Карточки статистики */
+  .summary-grid {
+    gap: 12px;
+  }
+  .summary-value {
+    font-size: 1.6rem;
+  }
+  .feature-card, .about-card, .ad-card {
+    padding: 18px 16px;
+  }
+  .feature-card .icon {
+    font-size: 2rem;
+  }
+}
+
+/* Планшеты и маленькие ноутбуки (769–1100px) — более сильное сжатие */
+@media (max-width: 1100px) and (min-width: 769px) {
+  html {
+    font-size: 14px;
+  }
+  main {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+  .ad-banner img,
+  .ad-placeholder {
+    height: 70px;
+  }
+  .hero h1 {
+    font-size: 2rem;
+  }
+  .dashboard-header h1 {
+    font-size: 1.8rem;
+  }
+  /* Сетки */
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* Карточки */
+  .feature-card, .about-card, .ad-card, .summary-card {
+    padding: 16px 14px;
+  }
+  .feature-card .icon {
+    font-size: 1.8rem;
+  }
+  .summary-value {
+    font-size: 1.4rem;
+  }
+  .ref-card {
+    padding: 16px 18px;
+  }
+  .schedule-card {
+    padding: 16px 18px;
+  }
+  .transactions-card {
+    padding: 16px 18px;
+  }
+  /* Таблицы */
+  .tx-table th, .tx-table td {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+  /* Меню */
+  .navbar {
+    padding: 10px 16px;
+  }
+  .nav-links {
+    gap: 16px;
+  }
+  .nav-links a {
+    font-size: 0.9rem;
+  }
+  /* Формы */
+  input, textarea, select {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+  button, .btn {
+    padding: 8px 22px;
+    font-size: 0.9rem;
+  }
+}
+
+/* ===== МОБИЛЬНЫЕ УСТРОЙСТВА (до 768px) ===== */
+@media (max-width: 768px) {
+  main {
+    margin-top: 70px;
+    padding: 0 16px;
+  }
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.1rem; }
+  .card { padding: 16px; }
+  .glow-1 { width: 350px; height: 350px; bottom: -100px; right: -80px; }
+  .glow-2 { width: 250px; height: 250px; top: -60px; left: -60px; }
+  .glow-3 { width: 180px; height: 180px; top: 10px; right: 10px; }
+  .glow-4 { width: 200px; height: 200px; bottom: -70px; left: -70px; }
+  .ad-banner img,
+  .ad-placeholder {
+    height: 70px;
+  }
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+  .dashboard-header h1 {
+    font-size: 1.6rem;
+  }
+  .summary-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .features-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .feature-card, .about-card, .ad-card, .summary-card {
+    padding: 14px 12px;
+  }
+  .feature-card .icon {
+    font-size: 1.6rem;
+  }
+  .summary-value {
+    font-size: 1.4rem;
+  }
+  .ref-card, .schedule-card, .transactions-card {
+    padding: 14px 16px;
+  }
+  .tx-table th, .tx-table td {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+  .pagination .page-link {
+    padding: 4px 10px;
+    font-size: 0.8rem;
+  }
+  input, textarea, select {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  button, .btn {
+    padding: 8px 18px;
+    font-size: 0.9rem;
+  }
+  .btn-sm {
+    padding: 4px 14px;
+    font-size: 0.8rem;
+  }
+}
+
+/* ===== ОЧЕНЬ МАЛЕНЬКИЕ ЭКРАНЫ (до 480px) ===== */
+@media (max-width: 480px) {
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1rem; }
+  main {
+    padding: 0 12px;
+  }
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .ad-banner img,
+  .ad-placeholder {
+    height: 60px;
+  }
+  .feature-card, .about-card, .ad-card, .summary-card {
+    padding: 12px 10px;
+  }
+  .feature-card .icon {
+    font-size: 1.4rem;
+  }
+  .summary-value {
+    font-size: 1.2rem;
+  }
+  .tx-table th, .tx-table td {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+  }
+  .tx-table {
+    font-size: 0.7rem;
+  }
+  .pagination .page-link {
+    padding: 2px 8px;
+    font-size: 0.7rem;
+  }
+  button, .btn {
+    padding: 6px 16px;
+    font-size: 0.85rem;
+  }
+  input, textarea, select {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+  .auth-card {
+    padding: 20px 16px;
+  }
+  .modal-content.mail-modal {
+    padding: 16px;
+  }
+}

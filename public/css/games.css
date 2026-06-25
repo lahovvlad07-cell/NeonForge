@@ -1,0 +1,373 @@
+/* games.css – стили для страницы сезонных игр */
+
+/* ===== БАННЕР ===== */
+.ad-slot {
+  max-width: 1100px;
+  margin: 0 auto 16px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  position: relative;
+}
+.ad-slot-top {
+  margin-top: 0;
+}
+.ad-banner {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1200 / 200;
+}
+.ad-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ad-banner:hover {
+  opacity: 0.9;
+}
+.ad-label {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 0.65rem;
+  padding: 2px 10px;
+  border-radius: 40px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(4px);
+}
+.ad-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  aspect-ratio: 1200 / 200;
+  background: linear-gradient(135deg, rgba(59,130,246,0.05), rgba(139,92,246,0.05));
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 0 16px;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+}
+.placeholder-icon { font-size: 1.6rem; }
+.placeholder-text { font-weight: 500; }
+.btn-placeholder {
+  background: var(--accent-blue);
+  color: #fff;
+  padding: 4px 16px;
+  font-size: 0.8rem;
+}
+.btn-placeholder:hover { background: var(--accent-purple); }
+
+@media (max-width: 768px) {
+  .ad-placeholder { font-size: 0.8rem; flex-wrap: wrap; gap: 6px; }
+  .ad-label { font-size: 0.55rem; top: 4px; right: 8px; }
+}
+@media (max-width: 480px) {
+  .ad-placeholder { font-size: 0.75rem; }
+}
+
+/* ===== HERO ===== */
+.games-hero {
+  text-align: center;
+  padding: 20px 0 10px;
+  margin-bottom: 20px;
+}
+.games-hero h1 {
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+  display: inline-block;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientShift 3s ease infinite;
+}
+.games-hero .subtitle {
+  max-width: 600px;
+  margin: 0 auto;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* ===== ИНФОРМАЦИЯ О СЕЗОНЕ ===== */
+.season-info {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 30px;
+}
+.season-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.season-header h2 {
+  font-size: 1.6rem;
+  margin: 0;
+}
+.season-badge {
+  display: inline-block;
+  padding: 4px 16px;
+  border-radius: 40px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.season-badge.active {
+  background: rgba(34,197,94,0.15);
+  color: var(--accent-green);
+}
+.season-desc {
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.season-dates {
+  display: flex;
+  gap: 20px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.season-timer {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+.season-timer span:last-child {
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+.season-progress {
+  width: 100%;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.season-progress .progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  transition: width 1s ease;
+  width: 0%;
+}
+.season-stats {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.season-stat {
+  display: flex;
+  flex-direction: column;
+}
+.season-stat .stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.season-stat .stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ===== НЕТ СЕЗОНА ===== */
+.no-season {
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  margin-bottom: 30px;
+}
+.no-season-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 12px;
+}
+.no-season h2 {
+  margin-bottom: 8px;
+}
+.no-season p {
+  color: var(--text-secondary);
+  max-width: 500px;
+  margin: 0 auto;
+}
+.no-season .hint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* ===== ИГРЫ ===== */
+.games-section {
+  margin-bottom: 40px;
+}
+.games-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+}
+.game-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.game-card:hover {
+  border-color: var(--accent-blue);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 32px rgba(59,130,246,0.15);
+}
+.game-icon {
+  font-size: 3rem;
+  margin-bottom: 8px;
+}
+.game-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+}
+.game-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  flex: 1;
+  margin-bottom: 12px;
+}
+.game-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.game-meta .best-score {
+  color: var(--accent-gold);
+}
+.btn-play {
+  width: 100%;
+  background: linear-gradient(135deg, var(--accent-green), #16a34a);
+}
+.btn-play:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 20px rgba(34,197,94,0.4);
+}
+
+/* ===== ЗАВЕРШЁННЫЕ СЕЗОНЫ ===== */
+.completed-seasons {
+  margin-top: 12px;
+}
+.completed-seasons h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+.completed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+.completed-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  transition: all 0.3s ease;
+}
+.completed-card:hover {
+  border-color: var(--accent-blue);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(59,130,246,0.1);
+}
+.completed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.completed-header h3 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+.completed-badge {
+  font-size: 0.7rem;
+  padding: 2px 10px;
+  border-radius: 40px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text-muted);
+}
+.completed-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+.completed-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ===== ПУСТЫЕ СОСТОЯНИЯ ===== */
+.empty-state {
+  text-align: center;
+  padding: 30px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+}
+.empty-state .empty-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 8px;
+}
+.empty-state h3 {
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.empty-state p {
+  color: var(--text-muted);
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 820px) {
+  .games-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .completed-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+  .completed-grid {
+    grid-template-columns: 1fr;
+  }
+  .season-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .season-stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

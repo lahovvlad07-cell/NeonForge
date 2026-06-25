@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/download.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <!-- БАННЕР #1 (вверху) -->
+    <div class="ad-slot ad-slot-top fade-up" style="--delay:0.1">
+      <% if (activeBanners && activeBanners.length > 0) { %>
+        <a href="<%= activeBanners[0].link || '#' %>" target="_blank" class="ad-banner">
+          <img src="<%= activeBanners[0].banner %>" alt="<%= activeBanners[0].project_name %>">
+        </a>
+      <% } else { %>
+        <div class="ad-placeholder">
+          <span>📢</span> Рекламное место — <a href="/ad-buy">разместить</a>
+        </div>
+      <% } %>
+    </div>
+
+    <section class="download-hero fade-up" style="--delay:0.2">
+      <h1 class="gradient-text">📲 Скачать приложения</h1>
+      <p class="subtitle">Скоро здесь появятся ссылки на EXE и APK. Следите за обновлениями!</p>
+    </section>
+
+    <div class="download-grid">
+      <!-- Windows -->
+      <div class="download-card fade-up" style="--delay:0.4">
+        <div class="platform-icon">🪟</div>
+        <h3>Windows (EXE)</h3>
+        <p>Установочный файл для ПК. Работает на Windows 10 и выше.</p>
+        <span class="status-badge soon">Скоро</span>
+        <div class="download-meta">
+          <span>Размер: ~50 МБ</span>
+          <span>Ожидается: июль 2025</span>
+        </div>
+        <button class="btn" disabled>Скачать</button>
+      </div>
+
+      <!-- Android -->
+      <div class="download-card fade-up" style="--delay:0.5">
+        <div class="platform-icon">📱</div>
+        <h3>Android (APK)</h3>
+        <p>Мобильное приложение для Android 8.0 и выше.</p>
+        <span class="status-badge soon">Скоро</span>
+        <div class="download-meta">
+          <span>Размер: ~30 МБ</span>
+          <span>Ожидается: август 2025</span>
+        </div>
+        <button class="btn" disabled>Скачать</button>
+      </div>
+
+      <!-- iOS -->
+      <div class="download-card fade-up" style="--delay:0.6">
+        <div class="platform-icon">🍏</div>
+        <h3>iOS (App Store)</h3>
+        <p>Приложение для iPhone и iPad. Доступно в App Store.</p>
+        <span class="status-badge planned">Планируется</span>
+        <div class="download-meta">
+          <span>Размер: ~40 МБ</span>
+          <span>Ожидается: сентябрь 2025</span>
+        </div>
+        <button class="btn" disabled>Скачать</button>
+      </div>
+    </div>
+
+    <section class="download-features fade-up" style="--delay:0.7">
+      <h2>✨ Что вас ждёт в приложениях</h2>
+      <ul>
+        <li>🎮 Мини-игры с заработком монет</li>
+        <li>🏆 Рейтинг и соревнования с друзьями</li>
+        <li>💰 Реальная экономика и вывод токенов</li>
+        <li>🔔 Уведомления о событиях и начислениях</li>
+      </ul>
+    </section>
+
+    <!-- БАННЕР #2 (внизу) -->
+    <div class="ad-slot ad-slot-bottom fade-up" style="--delay:0.8">
+      <% if (activeBanners && activeBanners.length > 1) { %>
+        <a href="<%= activeBanners[1].link || '#' %>" target="_blank" class="ad-banner">
+          <img src="<%= activeBanners[1].banner %>" alt="<%= activeBanners[1].project_name %>">
+        </a>
+      <% } else { %>
+        <div class="ad-placeholder">
+          <span>📢</span> Рекламное место — <a href="/ad-buy">разместить</a>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

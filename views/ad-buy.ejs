@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/ad-buy.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <section class="ad-buy-hero fade-up" style="--delay:0.1">
+      <h1 class="gradient-text">Разместите рекламу в NeonForge</h1>
+      <p class="subtitle">Привлекайте целевую аудиторию через баннеры на главной странице и в разделах</p>
+    </section>
+
+    <div class="balance-wrapper fade-up" style="--delay:0.2">
+      <div class="balance-block">
+        <div class="balance-info">
+          <span class="balance-label">Рекламный баланс</span>
+          <span class="balance-value"><%= user.balance || 0 %></span>
+          <span class="balance-hint">≈ $<%= ((user.balance || 0) * 0.01).toFixed(2) %></span>
+        </div>
+        <a href="/ad-queue" class="btn btn-outline btn-sm">Пополнить</a>
+      </div>
+    </div>
+
+    <% if (message) { %>
+      <div class="message error fade-up" style="--delay:0.3"><%= message %></div>
+    <% } %>
+
+    <section class="pricing fade-up" style="--delay:0.4">
+      <h2>Выберите раздел для размещения</h2>
+      <div class="pricing-grid">
+        <div class="pricing-card active" data-section="main">
+          <span class="pricing-icon">🏠</span>
+          <h3>Главная</h3>
+          <p class="price"><span id="priceMain"><%= main %></span> ток./день</p>
+          <p class="desc">Самый популярный раздел.</p>
+          <p class="queue-info">Очередь: <strong><%= mainDays %></strong> дн.</p>
+        </div>
+        <div class="pricing-card" data-section="about">
+          <span class="pricing-icon">ℹ️</span>
+          <h3>О проекте</h3>
+          <p class="price"><span id="priceAbout"><%= about %></span> ток./день</p>
+          <p class="desc">Информационный раздел.</p>
+          <p class="queue-info">Очередь: <strong><%= aboutDays %></strong> дн.</p>
+        </div>
+        <div class="pricing-card" data-section="games">
+          <span class="pricing-icon">🎮</span>
+          <h3>Сезонные игры</h3>
+          <p class="price"><span id="priceGames"><%= games %></span> ток./день</p>
+          <p class="desc">Для игровых проектов.</p>
+          <p class="queue-info">Очередь: <strong><%= gamesDays %></strong> дн.</p>
+        </div>
+        <div class="pricing-card" data-section="ad-queue">
+          <span class="pricing-icon">📢</span>
+          <h3>Реклама</h3>
+          <p class="price"><span id="priceAdQueue"><%= adQueue %></span> ток./день</p>
+          <p class="desc">Страница рекламной биржи.</p>
+          <p class="queue-info">Очередь: <strong><%= adQueueDays %></strong> дн.</p>
+        </div>
+        <div class="pricing-card" data-section="dashboard">
+          <span class="pricing-icon">👤</span>
+          <h3>Кабинет</h3>
+          <p class="price"><span id="priceDashboard"><%= dashboard %></span> ток./день</p>
+          <p class="desc">Личный кабинет пользователей.</p>
+          <p class="queue-info">Очередь: <strong><%= dashboardDays %></strong> дн.</p>
+        </div>
+        <div class="pricing-card" data-section="notifications">
+          <span class="pricing-icon">📬</span>
+          <h3>Уведомления</h3>
+          <p class="price"><span id="priceNotifications"><%= notifications %></span> ток./день</p>
+          <p class="desc">Почтовый ящик.</p>
+          <p class="queue-info">Очередь: <strong><%= notificationsDays %></strong> дн.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section fade-up" style="--delay:0.5">
+      <h2>Заполните заявку</h2>
+      <form action="/ad-buy" method="POST" enctype="multipart/form-data" class="ad-form" id="adForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="project_name">Название проекта <span class="required">*</span></label>
+            <input type="text" id="project_name" name="project_name" placeholder="Введите название" required>
+          </div>
+          <div class="form-group">
+            <label for="duration_days">Количество дней <span class="required">*</span></label>
+            <input type="number" id="duration_days" name="duration_days" min="1" step="1" placeholder="7" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="description">Описание <span class="required">*</span></label>
+          <textarea id="description" name="description" rows="2" placeholder="Краткое описание рекламы" required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="link">Ссылка на проект <span class="required">*</span></label>
+            <input type="url" id="link" name="link" placeholder="https://example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="section">Раздел <span class="required">*</span></label>
+            <select id="section" name="section" required>
+              <option value="main">Главная</option>
+              <option value="about">О проекте</option>
+              <option value="games">Сезонные игры</option>
+              <option value="ad-queue">Реклама</option>
+              <option value="dashboard">Кабинет</option>
+              <option value="notifications">Уведомления</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="banner">Баннер <span class="required">*</span></label>
+            <div class="file-upload">
+              <input type="file" id="banner" name="banner" accept="image/*" required>
+              <label for="banner" class="file-label">Выберите файл</label>
+              <span class="file-name" id="fileName">Файл не выбран</span>
+            </div>
+            <span class="hint">Любое изображение будет автоматически подогнано под размер 1200×200 (соотношение 6:1) с обрезкой.</span>
+          </div>
+          <div class="form-group price-preview">
+            <label>Итоговая стоимость</label>
+            <div class="price-box">
+              <span id="priceDisplay">0 токенов</span>
+              <span class="price-detail" id="priceDetail">выберите дни</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group preview-group">
+          <label>Предпросмотр баннера</label>
+          <div class="preview-container">
+            <div class="preview-mini" id="previewMini">
+              <span>Баннер будет показан здесь</span>
+            </div>
+          </div>
+          <div class="preview-hint">
+            Изображение будет обрезано до пропорций <strong>1200×200</strong> (6:1). Центр сохраняется.
+          </div>
+          <div class="preview-info">
+            <span class="preview-project" id="previewProject">Ваш проект</span>
+            <span class="preview-section" id="previewSection">Главная</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-submit">Отправить заявку</button>
+      </form>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script>
+    const priceMain = parseInt(document.getElementById('priceMain').textContent) || 10;
+    const priceAbout = parseInt(document.getElementById('priceAbout').textContent) || 3;
+    const priceGames = parseInt(document.getElementById('priceGames').textContent) || 5;
+    const priceAdQueue = parseInt(document.getElementById('priceAdQueue').textContent) || 20;
+    const priceDashboard = parseInt(document.getElementById('priceDashboard').textContent) || 15;
+    const priceNotifications = parseInt(document.getElementById('priceNotifications').textContent) || 10;
+
+    document.getElementById('banner').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      const label = document.getElementById('fileName');
+      if (file) {
+        label.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const preview = document.getElementById('previewMini');
+          preview.innerHTML = `<img src="${event.target.result}" alt="Баннер">`;
+          preview.classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+      } else {
+        label.textContent = 'Файл не выбран';
+        const preview = document.getElementById('previewMini');
+        preview.innerHTML = '<span>Баннер будет показан здесь</span>';
+        preview.classList.remove('has-image');
+      }
+    });
+
+    document.getElementById('project_name').addEventListener('input', function() {
+      document.getElementById('previewProject').textContent = this.value || 'Ваш проект';
+    });
+
+    const sectionSelect = document.getElementById('section');
+    const daysInput = document.getElementById('duration_days');
+    const priceDisplay = document.getElementById('priceDisplay');
+    const priceDetail = document.getElementById('priceDetail');
+
+    const pricesMap = {
+      main: priceMain,
+      about: priceAbout,
+      games: priceGames,
+      'ad-queue': priceAdQueue,
+      dashboard: priceDashboard,
+      notifications: priceNotifications
+    };
+    const sectionNames = {
+      main: 'Главная',
+      about: 'О проекте',
+      games: 'Сезонные игры',
+      'ad-queue': 'Реклама',
+      dashboard: 'Кабинет',
+      notifications: 'Уведомления'
+    };
+
+    function updatePrice() {
+      const section = sectionSelect.value;
+      const days = parseInt(daysInput.value) || 0;
+      const pricePerDay = pricesMap[section] || 10;
+      const total = pricePerDay * days;
+      if (days > 0) {
+        priceDisplay.textContent = `${total} токенов`;
+        priceDetail.textContent = `${days} дн. × ${pricePerDay} ток./день (${sectionNames[section]})`;
+      } else {
+        priceDisplay.textContent = '0 токенов';
+        priceDetail.textContent = 'выберите дни';
+      }
+    }
+
+    sectionSelect.addEventListener('change', function() {
+      const section = this.value;
+      document.querySelectorAll('.pricing-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.section === section);
+      });
+      document.getElementById('previewSection').textContent = sectionNames[section] || section;
+      updatePrice();
+    });
+
+    daysInput.addEventListener('input', updatePrice);
+    updatePrice();
+
+    document.querySelectorAll('.pricing-card').forEach(card => {
+      card.addEventListener('click', function() {
+        const section = this.dataset.section;
+        document.getElementById('section').value = section;
+        document.querySelectorAll('.pricing-card').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('previewSection').textContent = sectionNames[section] || section;
+        updatePrice();
+      });
+    });
+
+    document.querySelector('.pricing-card[data-section="main"]')?.classList.add('active');
+  </script>
+</body>
+</html>

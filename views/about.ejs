@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/about.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <!-- Баннер -->
+    <div class="ad-slot ad-slot-top fade-up" style="--delay:0.1">
+      <% if (activeBanners && activeBanners.length > 0) { %>
+        <a href="<%= activeBanners[0].link || '#' %>" target="_blank" class="ad-banner">
+          <img src="<%= activeBanners[0].banner %>" alt="<%= activeBanners[0].project_name %>">
+          <span class="ad-label">Реклама</span>
+        </a>
+      <% } else { %>
+        <div class="ad-placeholder">
+          <span class="placeholder-icon">📢</span>
+          <span class="placeholder-text">Рекламное место</span>
+          <a href="/ad-buy" class="btn btn-sm btn-placeholder">Разместить</a>
+        </div>
+      <% } %>
+    </div>
+
+    <section class="about-hero fade-up" style="--delay:0.2">
+      <h1 class="gradient-text">О проекте</h1>
+      <p class="subtitle">
+        <strong>NeonForge</strong> — это игровая экосистема, где каждый может зарабатывать, играя.
+        Мы создаём платформу, в которой время и навыки игроков конвертируются в реальную ценность
+        через токены, сезоны и рекламную биржу.
+      </p>
+    </section>
+
+    <div class="about-grid">
+      <div class="about-card fade-up" style="--delay:0.4; --card-color: var(--accent-blue);">
+        <div class="icon">🎯</div>
+        <h3>Наша миссия</h3>
+        <p>Создать устойчивую игровую экономику, где каждый участник может влиять на развитие проекта и получать вознаграждение за активность.</p>
+      </div>
+      <div class="about-card fade-up" style="--delay:0.5; --card-color: var(--accent-purple);">
+        <div class="icon">⚙️</div>
+        <h3>Технологии</h3>
+        <p>Современный стек: Node.js, SQLite, WebSockets. В будущем — интеграция с блокчейном (TON/Solana) для выпуска собственного токена и децентрализованных выплат.</p>
+      </div>
+      <div class="about-card fade-up" style="--delay:0.6; --card-color: var(--accent-gold);">
+        <div class="icon">📈</div>
+        <h3>Развитие</h3>
+        <p>Проект растёт сезонами. Каждый сезон приносит новые игры, механики и возможности для заработка. Мы постоянно добавляем контент и улучшаем платформу.</p>
+      </div>
+      <div class="about-card fade-up" style="--delay:0.7; --card-color: #f472b6;">
+        <div class="icon">👥</div>
+        <h3>Сообщество</h3>
+        <p>Мы строим экосистему для единомышленников. Присоединяйся к нам, чтобы вместе создавать будущее игровой индустрии.</p>
+      </div>
+    </div>
+
+    <section class="roadmap fade-up" style="--delay:0.8">
+      <h2 class="text-center">🗺️ Дорожная карта</h2>
+      <div class="roadmap-grid">
+        <div class="roadmap-card" style="--card-status: var(--accent-green);">
+          <span class="status done">✅ Готово</span>
+          <h3>Сайт и экономика</h3>
+          <p>Запуск платформы, регистрация, реферальная система, рекламная биржа. Создана базовая экономическая модель.</p>
+        </div>
+        <div class="roadmap-card" style="--card-status: var(--accent-gold);">
+          <span class="status progress">🔄 В процессе</span>
+          <h3>Мини-игры</h3>
+          <p>Разработка первых игр для ПК и браузера. Тестирование игровых механик и системы начисления монет.</p>
+        </div>
+        <div class="roadmap-card" style="--card-status: var(--accent-blue);">
+          <span class="status planned">📅 Планируется</span>
+          <h3>Блокчейн-интеграция</h3>
+          <p>Выпуск токена на TON/Solana, вывод средств на кошельки, добавление ликвидности на DEX.</p>
+        </div>
+        <div class="roadmap-card" style="--card-status: var(--accent-purple);">
+          <span class="status planned">📅 Планируется</span>
+          <h3>Мобильное приложение</h3>
+          <p>Нативное приложение для iOS и Android с полным функционалом платформы.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/mail.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <div class="mail-container">
+      <div class="mail-header">
+        <h1>✉️ Почта</h1>
+        <div class="mail-actions">
+          <span class="mail-user"><%= user.email %></span>
+          <button class="btn btn-sm" id="newMailBtn">✏️ Написать</button>
+        </div>
+      </div>
+
+      <!-- Форма отправки (скрыта) -->
+      <div class="new-mail-form" id="newMailForm" style="display:none;">
+        <h3>Новое письмо</h3>
+        <form action="/mail/send" method="POST">
+          <div class="form-group">
+            <label>Кому (username или email)</label>
+            <input type="text" name="receiver" placeholder="Введите имя пользователя или email" required>
+          </div>
+          <div class="form-group">
+            <label>Тема</label>
+            <input type="text" name="subject" placeholder="Тема письма">
+          </div>
+          <div class="form-group">
+            <label>Сообщение</label>
+            <textarea name="body" rows="5" required placeholder="Введите текст..."></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn">Отправить</button>
+            <button type="button" class="btn btn-outline" id="cancelMailBtn">Отмена</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Вкладки -->
+      <div class="mail-tabs">
+        <button class="tab-btn active" data-tab="inbox">📥 Входящие <span id="inboxCount" class="badge"></span></button>
+        <button class="tab-btn" data-tab="sent">📤 Отправленные</button>
+      </div>
+
+      <!-- Входящие -->
+      <div class="tab-content active" id="tab-inbox">
+        <% if (inbox && inbox.length) { %>
+          <% inbox.forEach(msg => { %>
+            <div class="mail-item <%= msg.is_read ? 'read' : 'unread' %>" data-id="<%= msg.id %>">
+              <div class="mail-header-line">
+                <span class="mail-sender"><strong><%= msg.sender_name %></strong></span>
+                <span class="mail-date"><%= new Date(msg.created_at).toLocaleString() %></span>
+              </div>
+              <div class="mail-subject"><%= msg.subject || 'Без темы' %></div>
+              <div class="mail-body"><%= msg.body %></div>
+              <div class="mail-actions">
+                <% if (!msg.is_read) { %>
+                  <button class="btn-read btn-sm" data-id="<%= msg.id %>">Отметить прочитанным</button>
+                <% } %>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p class="text-muted">Нет писем</p>
+        <% } %>
+      </div>
+
+      <!-- Отправленные -->
+      <div class="tab-content" id="tab-sent">
+        <% if (sent && sent.length) { %>
+          <% sent.forEach(msg => { %>
+            <div class="mail-item">
+              <div class="mail-header-line">
+                <span class="mail-sender"><strong>Кому:</strong> <%= msg.receiver_name %></span>
+                <span class="mail-date"><%= new Date(msg.created_at).toLocaleString() %></span>
+              </div>
+              <div class="mail-subject"><%= msg.subject || 'Без темы' %></div>
+              <div class="mail-body"><%= msg.body %></div>
+              <div class="mail-actions">
+                <span class="mail-status"><%= msg.is_read ? '✅ Прочитано' : '⏳ Не прочитано' %></span>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p class="text-muted">Нет отправленных писем</p>
+        <% } %>
+      </div>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+      });
+    });
+
+    document.getElementById('newMailBtn').addEventListener('click', function() {
+      const form = document.getElementById('newMailForm');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    });
+    document.getElementById('cancelMailBtn').addEventListener('click', function() {
+      document.getElementById('newMailForm').style.display = 'none';
+    });
+
+    document.querySelectorAll('.btn-read').forEach(btn => {
+      btn.addEventListener('click', async function() {
+        const id = this.dataset.id;
+        const res = await fetch('/mail/read/' + id, { method: 'POST' });
+        if (res.ok) {
+          const item = this.closest('.mail-item');
+          item.classList.remove('unread');
+          item.classList.add('read');
+          this.remove();
+          const badge = document.getElementById('unreadBadge');
+          if (badge) {
+            const count = parseInt(badge.textContent) - 1;
+            if (count > 0) badge.textContent = count;
+            else badge.style.display = 'none';
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

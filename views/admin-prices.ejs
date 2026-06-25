@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <h1 class="gradient-text">💲 Управление ценами на рекламу</h1>
+    <p class="text-secondary">Установите стоимость размещения за 1 день в каждом разделе (в токенах).</p>
+
+    <% if (success) { %>
+      <div class="message success">✅ Цены обновлены!</div>
+    <% } %>
+
+    <form method="POST" class="admin-form">
+      <div class="form-group">
+        <label for="price_main">Главная (токенов/день)</label>
+        <input type="number" id="price_main" name="price_main" value="<%= main %>" min="1" step="1" required>
+      </div>
+      <div class="form-group">
+        <label for="price_about">О проекте (токенов/день)</label>
+        <input type="number" id="price_about" name="price_about" value="<%= about %>" min="1" step="1" required>
+      </div>
+      <div class="form-group">
+        <label for="price_games">Сезонные игры (токенов/день)</label>
+        <input type="number" id="price_games" name="price_games" value="<%= games %>" min="1" step="1" required>
+      </div>
+      <div class="form-group">
+        <label for="price_ad_queue">Реклама (токенов/день)</label>
+        <input type="number" id="price_ad_queue" name="price_ad_queue" value="<%= adQueue %>" min="1" step="1" required>
+      </div>
+      <div class="form-group">
+        <label for="price_dashboard">Кабинет (токенов/день)</label>
+        <input type="number" id="price_dashboard" name="price_dashboard" value="<%= dashboard %>" min="1" step="1" required>
+      </div>
+      <div class="form-group">
+        <label for="price_notifications">Уведомления (токенов/день)</label>
+        <input type="number" id="price_notifications" name="price_notifications" value="<%= notifications %>" min="1" step="1" required>
+      </div>
+      <button type="submit" class="btn">💾 Сохранить</button>
+      <a href="/admin" class="btn btn-outline">← Назад в админку</a>
+    </form>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

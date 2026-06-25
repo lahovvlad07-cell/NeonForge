@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/games.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <!-- Баннер -->
+    <div class="ad-slot ad-slot-top fade-up" style="--delay:0.1">
+      <% if (activeBanners && activeBanners.length > 0) { %>
+        <a href="<%= activeBanners[0].link || '#' %>" target="_blank" class="ad-banner">
+          <img src="<%= activeBanners[0].banner %>" alt="<%= activeBanners[0].project_name %>">
+          <span class="ad-label">Реклама</span>
+        </a>
+      <% } else { %>
+        <div class="ad-placeholder">
+          <span class="placeholder-icon">📢</span>
+          <span class="placeholder-text">Рекламное место</span>
+          <a href="/ad-buy" class="btn btn-sm btn-placeholder">Разместить</a>
+        </div>
+      <% } %>
+    </div>
+
+    <section class="games-hero fade-up" style="--delay:0.2">
+      <h1 class="gradient-text">Сезонные игры</h1>
+      <p class="subtitle">Играйте, зарабатывайте монеты и повышайте свой рейтинг!</p>
+    </section>
+
+    <!-- Информация о текущем сезоне -->
+    <% if (activeSeason) { %>
+      <div class="season-info fade-up" style="--delay:0.3">
+        <div class="season-header">
+          <h2>📅 <%= activeSeason.name %></h2>
+          <span class="season-badge active">Активен</span>
+        </div>
+        <p class="season-desc"><%= activeSeason.description || 'Описание сезона' %></p>
+        <div class="season-dates">
+          <span>Начало: <%= new Date(activeSeason.start_date).toLocaleDateString() %></span>
+          <span>Окончание: <%= new Date(activeSeason.end_date).toLocaleDateString() %></span>
+        </div>
+        <div class="season-timer">
+          <span>⏳ Осталось: </span>
+          <span id="seasonTimer" data-end="<%= new Date(activeSeason.end_date).getTime() %>"></span>
+        </div>
+        <div class="season-progress">
+          <div class="progress-bar" id="seasonProgress"></div>
+        </div>
+        <!-- Статистика пользователя в этом сезоне -->
+        <div class="season-stats">
+          <div class="season-stat">
+            <span class="stat-label">🪙 Монет заработано</span>
+            <span class="stat-value"><%= userSeasonStats ? userSeasonStats.total_coins : 0 %></span>
+          </div>
+          <div class="season-stat">
+            <span class="stat-label">🎮 Сыграно игр</span>
+            <span class="stat-value"><%= userSeasonStats ? userSeasonStats.total_games : 0 %></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Список игр -->
+      <section class="games-section fade-up" style="--delay:0.4">
+        <h2>🎯 Игры сезона</h2>
+        <div class="games-grid">
+          <% if (games && games.length > 0) { %>
+            <% games.forEach((game, index) => { %>
+              <div class="game-card fade-up" style="--delay: <%= 0.5 + index * 0.1 %>">
+                <div class="game-icon"><%= game.icon %></div>
+                <h3><%= game.name %></h3>
+                <p class="game-desc"><%= game.description %></p>
+                <div class="game-meta">
+                  <span>💰 Макс. монет: <%= game.max_score %></span>
+                  <% if (bestScores && bestScores[game.name] !== undefined) { %>
+                    <span class="best-score">🏅 Рекорд: <%= bestScores[game.name] %></span>
+                  <% } else { %>
+                    <span class="best-score">🏅 Рекорд: 0</span>
+                  <% } %>
+                </div>
+                <button class="btn btn-play" onclick="playGame('<%= game.id %>', '<%= game.name %>')">Играть →</button>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="empty-state">
+              <span class="empty-icon">🎮</span>
+              <h3>Игры отсутствуют</h3>
+              <p>В этом сезоне пока нет игр. Следите за обновлениями!</p>
+            </div>
+          <% } %>
+        </div>
+      </section>
+    <% } else { %>
+      <!-- Если нет активного сезона -->
+      <div class="no-season fade-up" style="--delay:0.3">
+        <div class="no-season-content">
+          <span class="no-season-icon">📅</span>
+          <h2>Нет активного сезона</h2>
+          <p>В данный момент нет активных сезонов. Следите за новостями, скоро мы запустим новый сезон!</p>
+          <p class="hint">Завершённые сезоны можно посмотреть ниже.</p>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Завершённые сезоны -->
+    <section class="completed-seasons fade-up" style="--delay:0.6">
+      <h2>📜 Завершённые сезоны</h2>
+      <% if (completedSeasons && completedSeasons.length > 0) { %>
+        <div class="completed-grid">
+          <% completedSeasons.forEach(season => { %>
+            <div class="completed-card">
+              <div class="completed-header">
+                <h3><%= season.name %></h3>
+                <span class="completed-badge">✅ Завершён</span>
+              </div>
+              <p><%= season.description || 'Без описания' %></p>
+              <div class="completed-meta">
+                <span>📅 <%= new Date(season.start_date).toLocaleDateString() %> – <%= new Date(season.end_date).toLocaleDateString() %></span>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <span class="empty-icon">📭</span>
+          <h3>Нет завершённых сезонов</h3>
+          <p>Первый сезон ещё не завершён. Следите за прогрессом!</p>
+        </div>
+      <% } %>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script>
+    // === ТАЙМЕР СЕЗОНА ===
+    function updateSeasonTimer() {
+      const timerEl = document.getElementById('seasonTimer');
+      if (!timerEl) return;
+      const endTime = parseInt(timerEl.dataset.end);
+      const now = Date.now();
+      const diff = endTime - now;
+      if (diff <= 0) {
+        timerEl.textContent = 'Сезон завершён!';
+        document.querySelector('.season-badge.active')?.textContent = 'Завершён';
+        return;
+      }
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+      timerEl.textContent = `${days}д ${hours}ч ${minutes}м ${seconds}с`;
+      
+      // Обновляем прогресс-бар
+      const progressBar = document.getElementById('seasonProgress');
+      if (progressBar) {
+        const startTime = new Date('<%= activeSeason ? activeSeason.start_date : '' %>').getTime();
+        const totalDuration = endTime - startTime;
+        const elapsed = now - startTime;
+        const progress = Math.min((elapsed / totalDuration) * 100, 100);
+        progressBar.style.width = progress + '%';
+      }
+    }
+
+    setInterval(updateSeasonTimer, 1000);
+    updateSeasonTimer();
+
+    // === КНОПКА "ИГРАТЬ" (заглушка) ===
+    function playGame(gameId, gameName) {
+      alert(`Игра "${gameName}" будет запущена в ближайшее время. Следите за обновлениями!`);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,389 @@
+/* ad-buy.css – финальный стиль страницы подачи заявки на рекламу (6:1, cover) */
+
+/* ===== HERO ===== */
+.ad-buy-hero {
+  text-align: center;
+  padding: 20px 0 10px;
+  margin-bottom: 20px;
+}
+.ad-buy-hero h1 {
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+  display: inline-block;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-blue));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientShift 3s ease infinite;
+}
+.ad-buy-hero .subtitle {
+  max-width: 600px;
+  margin: 0 auto;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* ===== БАЛАНС ===== */
+.balance-wrapper {
+  max-width: 700px;
+  margin: 0 auto 24px;
+}
+.balance-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08));
+  border: 1px solid var(--accent-blue);
+  border-radius: var(--radius);
+  padding: 12px 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.balance-info {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.balance-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.balance-value {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--accent-blue);
+}
+.balance-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.balance-block .btn-outline {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+.balance-block .btn-outline:hover {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+/* ===== ТАРИФЫ ===== */
+.pricing {
+  max-width: 900px;
+  margin: 0 auto 28px;
+}
+.pricing h2 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 1.3rem;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.pricing-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 12px 12px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.pricing-card:hover {
+  border-color: var(--accent-blue);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(59,130,246,0.15);
+}
+.pricing-card.active {
+  border-color: var(--accent-blue);
+  background: rgba(59,130,246,0.05);
+  box-shadow: 0 0 20px rgba(59,130,246,0.15);
+}
+.pricing-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 2px;
+}
+.pricing-card h3 {
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+.pricing-card .price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin-bottom: 2px;
+}
+.pricing-card .desc {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+.pricing-card .queue-info {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 4px;
+}
+.pricing-card .queue-info strong {
+  color: var(--accent-blue);
+}
+
+/* ===== ФОРМА ===== */
+.form-section {
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+.form-section h2 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 1.3rem;
+}
+.ad-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.ad-form .form-group {
+  margin-bottom: 14px;
+}
+.ad-form label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.ad-form .required {
+  color: var(--accent-red);
+  font-weight: 700;
+}
+.ad-form input,
+.ad-form textarea,
+.ad-form select {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+.ad-form input:focus,
+.ad-form textarea:focus,
+.ad-form select:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+  outline: none;
+}
+.ad-form textarea {
+  resize: vertical;
+}
+
+/* ===== ЗАГРУЗКА ФАЙЛА ===== */
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.file-upload input[type="file"] {
+  display: none;
+}
+.file-label {
+  padding: 6px 14px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+.file-label:hover {
+  border-color: var(--accent-blue);
+  color: var(--text-primary);
+}
+.file-name {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+.hint {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* ===== ИТОГОВАЯ СТОИМОСТЬ ===== */
+.price-preview {
+  margin-top: 0;
+}
+.price-box {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.price-box #priceDisplay {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+.price-box .price-detail {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+/* ===== ПРЕДПРОСМОТР БАННЕРА ===== */
+.preview-group {
+  margin-top: 6px;
+}
+.preview-container {
+  position: relative;
+  width: 100%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  aspect-ratio: 1200 / 200; /* 6:1 */
+}
+.preview-mini {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  background: var(--bg-primary);
+}
+.preview-mini.has-image {
+  padding: 0;
+}
+.preview-mini img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.preview-hint {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  text-align: center;
+}
+.preview-hint strong {
+  color: var(--accent-blue);
+}
+.preview-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.preview-project {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.preview-section {
+  color: var(--accent-blue);
+}
+
+/* ===== КНОПКА ОТПРАВКИ ===== */
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  margin-top: 6px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  transition: all 0.3s ease;
+}
+.btn-submit:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 24px rgba(59,130,246,0.4);
+}
+
+/* ===== СООБЩЕНИЯ ===== */
+.message {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 20px;
+  font-weight: 500;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.message.error {
+  background: rgba(239,68,68,0.15);
+  color: var(--accent-red);
+  border: 1px solid var(--accent-red);
+}
+.message.success {
+  background: rgba(34,197,94,0.15);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 820px) {
+  .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .ad-buy-hero h1 {
+    font-size: 2rem;
+  }
+  .balance-block {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .balance-info {
+    justify-content: center;
+  }
+  .balance-block .btn-outline {
+    width: 100%;
+    text-align: center;
+  }
+  .ad-form .form-row {
+    grid-template-columns: 1fr;
+  }
+  .file-upload {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .file-label {
+    text-align: center;
+  }
+  .price-box {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .preview-container {
+    aspect-ratio: 1200 / 200;
+  }
+}
+@media (max-width: 480px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  .balance-value {
+    font-size: 1.4rem;
+  }
+}

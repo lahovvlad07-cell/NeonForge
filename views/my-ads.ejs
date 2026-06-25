@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/my-ads.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <div class="my-ads-container">
+      <div class="my-ads-header fade-up">
+        <h1>📋 Мои рекламные заявки</h1>
+        <a href="/ad-buy" class="btn btn-sm">➕ Новая заявка</a>
+      </div>
+
+      <% if (ads && ads.length) { %>
+        <div class="ads-list">
+          <% ads.forEach(ad => { %>
+            <div class="ad-item fade-up">
+              <div class="ad-header">
+                <span class="ad-project"><%= ad.project_name %></span>
+                <span class="ad-status status-<%= ad.status %>">
+                  <%= ad.status === 'pending' ? '⏳ На рассмотрении' :
+                     ad.status === 'active' ? '🟢 Активна' :
+                     ad.status === 'completed' ? '✅ Завершена' :
+                     ad.status === 'rejected' ? '❌ Отклонена' : ad.status %>
+                </span>
+              </div>
+              <div class="ad-body">
+                <p><%= ad.description %></p>
+                <div class="ad-meta">
+                  <span>🔗 <a href="<%= ad.link %>" target="_blank"><%= ad.link %></a></span>
+                  <span>📅 <%= new Date(ad.created_at).toLocaleDateString() %></span>
+                </div>
+                <div class="ad-details">
+                  <% if (ad.ad_type === 'company') { %>
+                    <span>💰 Бюджет: <%= ad.budget_tokens %> токенов</span>
+                    <span>📆 Длительность: <%= ad.duration_days %> дней</span>
+                  <% } else { %>
+                    <span>⏱️ Ставка: <%= ad.rate_per_minute %> токенов/мин</span>
+                  <% } %>
+                  <span>📌 Размещение: <%= ad.placement %> / <%= ad.section %></span>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="empty-state fade-up">
+          <span class="empty-icon">📭</span>
+          <h3>У вас пока нет заявок</h3>
+          <p>Создайте первую рекламную заявку, чтобы начать продвижение.</p>
+          <a href="/ad-buy" class="btn">Подать заявку</a>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

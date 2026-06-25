@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <div class="auth-page fade-up">
+      <div class="auth-card">
+        <h1 class="gradient-text">Вход</h1>
+        <p class="text-secondary">Войдите по email или имени пользователя</p>
+
+        <% if (error) { %>
+          <div class="message error"><%= error %></div>
+        <% } %>
+
+        <form action="/login" method="POST">
+          <div class="form-group">
+            <label for="login">Email или имя пользователя</label>
+            <input type="text" id="login" name="login" placeholder="example@mail.com или username" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Пароль</label>
+            <div class="password-wrapper">
+              <input type="password" id="password" name="password" placeholder="••••••••" required>
+              <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+            </div>
+          </div>
+
+          <!-- КАПЧА -->
+          <div class="form-group captcha-field">
+            <label for="captcha_answer">Решите пример: <strong class="captcha-text"><%= captcha %></strong></label>
+            <input type="number" id="captcha_answer" name="captcha_answer" placeholder="Введите ответ" required>
+          </div>
+
+          <button type="submit" class="btn btn-login">Войти</button>
+        </form>
+
+        <div class="auth-footer">
+          Нет аккаунта? <a href="/register">Зарегистрироваться</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script>
+    function togglePasswordVisibility() {
+      const input = document.getElementById('password');
+      const toggle = document.querySelector('.toggle-password');
+      if (input.type === 'password') {
+        input.type = 'text';
+        toggle.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        toggle.textContent = '👁️';
+      }
+    }
+  </script>
+</body>
+</html>

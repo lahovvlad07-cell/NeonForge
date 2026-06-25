@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main>
+    <h1 class="gradient-text">📨 Отправить уведомление</h1>
+    <p class="text-secondary">Отправьте системное сообщение всем пользователям или выбранному.</p>
+
+    <% if (req.query.success) { %>
+      <div class="message success">✅ Уведомление отправлено!</div>
+    <% } %>
+
+    <form method="POST" class="admin-form">
+      <div class="form-group">
+        <label for="subject">Тема *</label>
+        <input type="text" id="subject" name="subject" placeholder="Например: Важное обновление" required>
+      </div>
+      <div class="form-group">
+        <label for="body">Текст сообщения *</label>
+        <textarea id="body" name="body" rows="5" placeholder="Введите текст уведомления..." required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="user_id">Кому отправить</label>
+        <select id="user_id" name="user_id">
+          <option value="all">Всем пользователям</option>
+          <option value="1">Администратору (ID 1)</option>
+          <!-- Можно расширить списком пользователей, но пока оставим только всем и админу -->
+        </select>
+      </div>
+      <button type="submit" class="btn">📤 Отправить</button>
+      <a href="/admin" class="btn btn-outline">← Назад в админку</a>
+    </form>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>
